@@ -1,0 +1,94 @@
+{% load static %}
+<style>
+  .bg-manager{
+    background-color: #250c61;
+  }
+  .bg-customer{
+    background-color: #0d4363;
+  }
+  .bg-manager-sidebar{
+    background-color: #18083d;
+  }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-navbar bg-{{request.user.groups.all.0.name}}">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt=""></a>
+      <div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              
+              {% if request.user.groups.all.0.name == 'customer' %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'user-profile' request.user.username %}"><i class="fas fa-user"></i> Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'books-home' %}"><i class="fas fa-book"></i> Books</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blogs-home' %}"><i class="fas fa-quote-right"></i> Blogs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blogs-home-manager' %}"><i class="fas fa-thumbtack"></i> Manager Blogs</a>
+              </li>
+              {% elif request.user.groups.all.0.name == 'manager' %}
+              
+
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-users"></i> About us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-phone"></i> Contact</a>
+              </li>
+              {% endif %}
+              
+              {% if request.user.groups.all.0.name == 'customer' %}
+              <li class="nav-item">
+                <div class="dropdown">
+                    <a href="/" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src='{{customer.customerImageURL}}' alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>{{customer.username}}</strong>
+                    </a>
+                    <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                        <li><a class="dropdown-item" href="{% url 'create-post' %}"><i class="fas fa-book"></i> Create Post</a></li>
+                        <li><a class="dropdown-item" href="{% url 'books-home' %}"><i class="fas fa-quote-right"></i> All Posts</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user-profile' request.user.username %}"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+              </li>
+              {% elif request.user.groups.all.0.name == 'manager' %}
+              <li class="nav-item me-5">
+                <a href="{% url 'pending-post' %}"><i class="fas fa-bell text-white"></i><span class="text-danger"> {{pending_blog_posts.count|add:pending_book_posts.count}}</span></a>
+              </li>
+              <li class="nav-item">
+                <div class="dropdown">
+                    <a href="/" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src='{{manager.managerImageURL}}' alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>{{manager.username}}</strong>
+                    </a>
+                    <ul class="bg-manager-sidebar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="{% url 'manager-dashboard' request.user.username %}">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{% url 'manager-profile' request.user.username %}">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="btn btn-blue" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+      </div>
+    </div>
+  </nav>

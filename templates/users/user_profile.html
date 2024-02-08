@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+{% extends 'users/main.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <title>Profile</title>
+</head>
+<body>
+    {% block content %}
+
+<section id="content" class="container">
+    <!-- Begin .page-heading -->
+    {% if customerInfo.username.is_active == False %}
+    <div class="page-heading bg-secondary">
+        <div class="media clearfix">
+            <div class="media-left pr30">
+                <div class="user-heading round">
+                    <a href='{% url "user-profile" customerInfo.username %}'>
+                    <img class="media-object mw150" src='{{customerInfo.customerImageURL}}' alt="...">
+                    </a>
+                </div>
+                <h1 class="media-heading text-center">{{customerInfo.first_name}} {{customerInfo.last_name}}</h1>
+                <p class="text-center">{{customerInfo.email}}</p>
+            </div>                      
+            <div class="media-body va-m">
+                <div class="d-flex justify-content-between">
+                    <h1>Personal Info</h1>
+
+                    <div class="d-flex align-items-center">
+                      <ul class="navbar-nav">
+                        {% if flag == True %}
+                        <li class="nav-item">
+                          <div class="dropdown">
+                              <a href="/" class="d-flex align-items-center text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                                  <li><a class="dropdown-item" href='{% url "edit-user-profile" %}'><i class="fas fa-edit"></i> Edit Profile</a></li>
+                              </ul>
+                          </div>
+                        </li>
+                        {% endif %}
+                      </ul>
+                    </div>
+
+                    <!-- {% if flag == True %}
+                    <div class="d-flex align-items-center">
+                        <a class="btn btn-blue" href='{% url "edit-user-profile" %}'><i class="fas fa-edit"></i> Edit profile</a>
+                    </div>
+                    {% endif %} -->
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><span>Username </span>: {{customerInfo.username}}</p>
+                        <p><span>First Name </span>: {{customerInfo.first_name}}</p>
+                        <p><span>Last Name </span>: {{customerInfo.last_name}}</p>
+                        <p><span>Email </span>: {{customerInfo.email}}</p>
+                        <p><span>Phone </span>: {{customerInfo.phone}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><span>Address </span>: {{customerInfo.address}}</p>
+                        <p><span>Occupation </span>: {{customerInfo.occupation}}</p>
+                        <p><span>Gender </span>: {{customerInfo.gender}}</p>
+                        <p><span>Birthday</span>: {{customerInfo.birth_date}}</p>
+                    </div>
+                </div>
+                <br><br>
+                {% for message in messages %}
+                <div class="alert  alert-{{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="page-heading">
+      <div class="media clearfix">
+          <div class="media-left pr30">
+              <div class="user-heading round">
+                  <a href='{% url "user-profile" customerInfo.username %}'>
+                  <img class="media-object mw150" src='{{customerInfo.customerImageURL}}' alt="...">
+                  </a>
+              </div>
+              <h1 class="media-heading text-center">{{customerInfo.first_name}} {{customerInfo.last_name}}</h1>
+              <p class="text-center">{{customerInfo.email}}</p>
+          </div>                      
+          <div class="media-body va-m">
+              <div class="d-flex justify-content-between">
+                  <h1>Personal Info</h1>
+
+                  <div class="d-flex align-items-center">
+                    <ul class="navbar-nav">
+                      {% if flag == True %}
+                      <li class="nav-item">
+                        <div class="dropdown">
+                            <a href="/" class="d-flex align-items-center text-muted text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                            <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                                <li><a class="dropdown-item" href='{% url "edit-user-profile" %}'><i class="fas fa-edit"></i> Edit Profile</a></li>
+                            </ul>
+                        </div>
+                      </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-md-6">
+                      <p><span>Username </span>: {{customerInfo.username}}</p>
+                      <p><span>First Name </span>: {{customerInfo.first_name}}</p>
+                      <p><span>Last Name </span>: {{customerInfo.last_name}}</p>
+                      <p><span>Email </span>: {{customerInfo.email}}</p>
+                      <p><span>Phone </span>: {{customerInfo.phone}}</p>
+                  </div>
+                  <div class="col-md-6">
+                      <p><span>Address </span>: {{customerInfo.address}}</p>
+                      <p><span>Occupation </span>: {{customerInfo.occupation}}</p>
+                      <p><span>Gender </span>: {{customerInfo.gender}}</p>
+                      <p><span>Birthday</span>: {{customerInfo.birth_date}}</p>
+                  </div>
+              </div>
+              <br><br>
+              {% for message in messages %}
+              <div class="alert  alert-{{ message.tags}} alert-dismissible fade show" role="alert">
+                  {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-heading">
+                  <span class="panel-icon">
+                    <i class="fa fa-pencil-alt"></i>
+                  </span>
+                  <span class="panel-title">About Me</span>
+                </div>
+                <div class="panel-body pb5">
+    
+                  <h6>Experience</h6>
+    
+                  <h4>Work</h4>
+                  <p class="text-muted">
+                      None
+                  </p>
+    
+                  <hr class="short br-lighter">
+    
+                  <h6>Education</h6>
+    
+                  <h4>Bachelor of Science</h4>
+                  <p class="text-muted">
+                      None
+                  </p>
+    
+                  <hr class="short br-lighter">
+    
+                  <h6>Accomplishments</h6>
+    
+                  <h4>Successful Business</h4>
+                  <p class="text-muted pb10">
+                      None
+                  </p>
+    
+                </div>
+            </div>
+          
+            <div class="panel">
+                <div class="panel-heading">
+                <span class="panel-icon">
+                    <i class="fa fa-trophy"></i>
+                </span>
+                <span class="panel-title"> My Skills</span>
+                </div>
+                <div class="panel-body pb5">
+                    <p>None</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                  <span class="panel-icon">
+                    <i class="fa fa-star"></i>
+                  </span>
+                  <span class="panel-title">Social Media Handles</span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-icon-1 tc-med-2 tc-bold-last">
+                    <!-- <thead>
+                      <tr class="hidden">
+                        <th class="mw30">#</th>
+                        <th>First Name</th>
+                        <th>Revenue</th>
+                      </tr>
+                    </thead> -->
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="#" title="linkedin link">
+                                    <span class="fab fa-linkedin fs35 text-primary"></span>
+                                </a>
+                            </td>
+                            <td>linkedin</td>
+                          </tr>
+                          <tr>
+                            <td>
+                                <a href="#" title="github link">
+                                    <span class="fab fa-github-square fs35 text-dark"></span>
+                                  </a>
+                            </td>
+                            <td>github</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#" title="facebook link">
+                                    <span class="fab fa-facebook-square fs35 text-primary"></span>
+                                </a>
+                            </td>
+                            <td>facebook</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#" title="twitter link">
+                                    <span class="fab fa-twitter-square fs35 text-info"></span>
+                                </a>
+                            </td>
+                            <td>twitter</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <a href="#" title="twitter link">
+                                    <span class="fab fa-instagram-square fs35 text-danger"></span>
+                                </a>
+                            </td>
+                            <td>instagram</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+
+            {% if flag == True %}
+            <div class="panel">
+                <form>
+                    <textarea placeholder="Post your books for sell or exchange." rows="2" class="form-control input-lg p-text-area"></textarea>
+                </form>
+                <footer class="panel-footer panel-post d-flex justify-content-between">
+                    <ul class="nav nav-pills">
+                        <li>
+                            <a href="#"><i class="fa fa-map-marker-alt"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-camera"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class=" fa fa-film"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-microphone"></i></a>
+                        </li>
+                    </ul>
+                    <div>
+                      <ul class="navbar-nav">
+                        {% if flag == True %}
+                        <li class="nav-item">
+                          <div class="dropdown">
+                              <a href="/" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <strong><i class="fas fa-quote-left"></i> Create Post</strong>
+                              </a>
+                              <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                                  <li><a class="dropdown-item" href="{% url 'create-blog' %}"><i class="fas fa-quote-right"></i> Post New Blog</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{% url 'create-post' %}"><i class="fas fa-book"></i> Post New Book</a></li>
+                                </ul>
+                              </div>
+                            </li>
+                            {% endif %}
+                          </ul>
+                          
+                      <!-- <a class="dropdown-item" href="{% url 'create-post' %}"><i class="fas fa-book"></i> Create Post</a>
+                      <a href="{% url 'create-blog' %}" class="btn btn-blue"><i class="far fa-paper-plane"></i> Post New Blog</a>
+                      <a href="{% url 'create-post' %}" class="btn btn-blue"><i class="far fa-paper-plane"></i> Post New Book</a> -->
+                    
+                    </div>
+                </footer>
+            </div>
+            {% endif %}
+
+          <div class="tab-block">
+            {% if flag == True %}
+            <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="" data-toggle="tab">Recent Blogs</a>
+              </li>
+            </ul>
+            {% else %}
+            <ul class="nav nav-tabs mt-3">
+              <li class="active">
+                <a href="" data-toggle="tab">{{customerInfo.username}}'s Recent Blogs</a>
+              </li>
+            </ul>
+            {% endif %}
+            <div class="tab-content p30 mb-5">
+
+              <!-- Customer Blog Section -->
+              {% if blogs %}
+              {% for blog in blogs %}
+              {% if blog.review == 'True' %}
+              
+              <div class="sidebar-wrap">
+                <div class="panel-heading book-search-heading d-flex align-items-center border-all">
+                  <img src='{{customerInfo.customerImageURL}}' alt="" width="50" height="50" class="rounded-circle me-2">
+                  <div>
+                    <h4 class="font-weight-700 ps-2"><a class="username-text" href="{% url 'user-profile' blog.creator %}"> {{blog.creator.first_name}} {{blog.creator.last_name}} </a></h4>
+                    <h6 class="text-capitalize ps-2 font-small">
+                      <i class="far fa-calendar-alt mr-2"></i> {{ blog.created|date:"d N Y" }}
+                    </h6>
+                  </div>
+                </div>
+                <div class="sidebar-widget latest-post px-4 py-2 bg-blog border-bottom border-left border-right">
+                  <!-- Blog title and blog edit dropdown -->
+                    <div class="mb-3 d-flex justify-content-between">
+                      <h2 class="">
+                          <a class="text-blue" href="#"> {{ blog.title }} </a>
+                      </h2>
+
+                      <div class="d-flex align-items-center">
+                        <ul class="navbar-nav">
+                          {% if flag == True %}
+                          <li class="nav-item">
+                            <div class="dropdown">
+                                <a href="/" class="d-flex align-items-center text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="fas fa-edit"></i>
+                                </a>
+                                <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                                    <li><a class="dropdown-item" href="{% url 'update-blog' blog.id %}"><i class="fas fa-edit"></i> Update Blog</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'delete-blog' blog.id %}"><i class="fas fa-trash-alt"></i> Delete Blog</a></li>
+                                  </ul>
+                                </div>
+                              </li>
+                              {% endif %}
+                            </ul>
+                      </div>
+                    </div>
+                    <p class="mb-3">{{ blog.blog | linebreaksbr }}</p>
+                    {% if blog.image %}
+                      <img src="{{blog.image.url}}" alt="">
+                    {% endif %}
+                    <p class="card-text mb-2"><small class="text-muted">Last Updated: {{ blog.updated }}</small></p>
+                </div>
+              </div>
+    
+              <!-- Customer Blog Old Comment Section -->
+              {% if blog.blogcomment_set.all %}
+              <div class="col-lg-12 col-md-12">
+                <div class="p-3 border-left border-right" style="background-color: #fafafa;">
+                  <p class="text-muted fw-bold">All Comments</p>
+                  {% for comment in blog.blogcomment_set.all %}
+                  <div class="pt-2 pb-2" style="border-bottom: 1px solid #e2e2e2;">
+                    <div class="d-flex align-items-center">
+                      {% if comment.creator.groups.all.0.name == 'customer' %}
+                      {% for commentCus in all_customer %}
+                      {% if commentCus.username == comment.creator %}
+                      <img src='{{commentCus.customerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                      {% endif %}
+                      {% endfor %}
+                      {% elif comment.creator.groups.all.0.name == 'manager' %}
+                      {% for commentman in all_manager %}
+                      {% if commentman.username == comment.creator %}
+                      <img src='{{commentman.managerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                      {% endif %}
+                      {% endfor %}
+                      {% endif %}
+    
+                      <div>
+                        {% if comment.creator.groups.all.0.name == 'customer' %}
+                        <h6 class="ps-2"><a class="username-text" href="{% url 'user-profile' comment.creator %}"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a></h6>
+                        {% elif comment.creator.groups.all.0.name == 'manager' %}
+                        <h6 class="ps-2"><a class="username-text" href="#"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a><span><i class="fas fa-check-circle text-primary"></i></span></h6>
+                        {% endif %}
+                        <h6 class="text-muted ps-2 font-tiny">
+                          <i class="far fa-calendar-alt mr-2"></i> {{ comment.created|date:"d N Y" }}
+                        </h6>
+                      </div>
+                    </div>
+                    <p class="margin-zero">{{comment.comment}}</p>
+                    {% if comment.image %}
+                    <br>
+                    <img src="{{comment.image.url}}" alt="">
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+    
+              <!-- Blog Create Comment Section -->
+              <div class="col-lg-12 col-md-12 mb-4">
+                <div class="p-3 d-flex justify-content-end border-bottom border-left border-right" style="background-color: #fafafa; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                  <ul class="navbar-nav" style="width: 100%;">
+                    <li class="nav-item">
+                      <div class="dropdown">
+                          <a href="/" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <strong><i class="fas fa-quote-left"></i> Write a Comment</strong>
+                          </a>
+                          <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953; width: 100%;">
+                              
+                            <div class="m-2">
+                              <form method="POST" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="p-3">
+                                  {% for field in blogCommentForm %}
+                                  {% if field.label == 'Blog' %}
+                                  <input type="hidden" id="blogTitle" name="blogTitle" value="{{ blog }}">
+                                  <input type="hidden" id="commentFlag" name="commentFlag" value="blog">
+                                  {% else %}
+                                  <div>
+                                    {{field}}
+                                  </div>
+                                  {% endif %}
+                                  {% endfor %}
+                                </div>
+                                <input class="btn btn--sub btn--lg  my-md btn-blue" type="submit" value="Submit" />
+                              </form>
+                            </div>
+                            
+                          </ul>
+                      </div>
+                    </li>
+                  </ul>          
+                </div>
+              </div>
+              
+              {% else %}
+                {% if flag == True %}
+                <div class="p-3 mb-3 bg-white border-all border-radius-10">
+                  <strong class="text-muted">Your Blog Post <span class="text-blue">"{{blog.title}}"</span> still not reviewed by Manager. We appreciate your patience. Thank you.</strong>
+                </div>
+                {% else %}
+                <div class="p-3 mb-3 bg-white border-all border-radius-10">
+                  <strong class="text-muted">{{customerInfo.first_name}} {{customerInfo.last_name}}'s Blog Post <span class="text-blue">"{{blog.title}}"</span> still not reviewed by Manager.</strong>
+                </div>
+                {% endif %}
+              {% endif %}
+              {% endfor %}
+
+              {% else %}
+              {% if flag == True %}
+              <p>You haven't post any Blog yet.</p>
+              {% else %}
+              <p>{{customerInfo.first_name}} {{customerInfo.last_name}} hasn't post any Blog yet.</p>
+              {% endif %}
+              {% endif %}
+
+            </div>
+          </div>
+
+          <div class="tab-block">
+            {% if flag == True %}
+            <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="" data-toggle="tab">Recent Posts</a>
+              </li>
+            </ul>
+            {% else %}
+            <ul class="nav nav-tabs mt-3">
+              <li class="active">
+                <a href="" data-toggle="tab">{{customerInfo.username}}'s Recent Posts</a>
+              </li>
+            </ul>
+            {% endif %}
+            <div class="tab-content p30 mb-5" >
+
+              {% if books %}
+              {% for book in books %}
+              {% if book.review == 'True' %}
+              <div class="card mb-5">
+                  <div class="mb-3 d-flex justify-content-between">
+                    <img style="width: 40%; padding-top: 30px; margin-left: auto; margin-right: auto;" src="{{ book.bookImageURL }}" class="card-img-top" alt="{{ book.name }}">
+
+                    <div class="p-3">
+                      <ul class="navbar-nav">
+                        {% if flag == True %}
+                        <li class="nav-item">
+                          <div class="dropdown">
+                              <a href="/" class="d-flex align-items-center text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953;">
+                                  <li><a class="dropdown-item" href="{% url 'update-post' book.id %}"><i class="fas fa-edit"></i> Update Post</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{% url 'delete-post' book.id %}"><i class="fas fa-trash-alt"></i> Delete Post</a></li>
+                                </ul>
+                              </div>
+                            </li>
+                            {% endif %}
+                          </ul>
+                    </div>
+
+                  </div>
+                  
+                  <div class="card-body border-bottom">
+                    <div class="mb-3">
+                      <h2 class="">
+                          <a class="text-blue" href="{% url 'books-details' book.slug %}"> {{ book.name }} </a>
+                        </h2>
+                        <h6 class="text-blue"> by {{book.author}} (Author)</h6>
+                  </div>
+                  <div class="blog-item-meta mb-2">
+                    <span class="text-black text-capitalize me-3">
+                      <i class="fas fa-book mr-2"></i> {{ book.edition }} Edition
+                    </span>
+                    <!-- <span class="text-capitalize me-3">
+                      <i class="fas fa-bookmark mr-2"></i> {{ book.category.category }} Category
+                    </span> -->
+                    {% for cat in book.category.all %}
+                        <span class="text-capitalize me-3">
+                          &bull; {{ cat.name }}
+                        </span>
+                    {%endfor%}
+                  </div>
+                  <div class="mb-3">
+                    <span class="text-black text-capitalize me-3">
+                      <i class="far fa-calendar-alt mr-2"></i> {{ book.created|date:"d N Y" }}
+                    </span>
+                    <a href="{% url 'user-profile' book.creator.username %}" class="text-blue text-capitalize mr-3">
+                      <i class="fa fa-user mr-2"></i> {{ book.creator.first_name }}
+                    </a>
+                  </div>
+                  <p class="card-text">{{ book.description|truncatechars:250 }}</p>
+
+                  <div class="d-flex align-items-end">
+                    {% if book.exchange == 'Yes' %}
+                    <p class="font-weight-700">Exchange: <span style="font-size: 1.5em;" class="font-weight-900 text-blue">{{book.exchange}}</span></p>
+                    {% else %}
+                    <p class="font-weight-700">Exchange: <span style="font-size: 1.5em;">{{book.exchange}}</span></p>
+                    {% endif%}
+                    {% if book.price != None %}
+                    <p class="font-weight-700 ms-3">Price: <span class="font-weight-900 text-blue" style="font-size: 2em;">&#2547;</span><span style="font-size: 1.5em;" class="font-weight-900 text-blue">{{book.price}}</span></p>
+                    {% else %}
+                    <p class="font-weight-700 ms-3">Price: <span style="font-size: 1.5em;">{{book.price}}</span></p>
+                    {% endif%}
+                  </div>
+                  
+                  <p class="card-text"><small class="text-muted">Last Updated: {{ book.updated }}</small></p>
+                  
+                  <div class="d-flex justify-content-between">
+                    <a href="{% url 'books-details' book.slug %}" class="btn btn-blue btn-icon">
+                      See Details <i class="fas fa-angle-double-right"></i>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Book Old Comment Section -->
+                {% if book.bookcomment_set.all %}
+                <div class="col-lg-12 col-md-12">
+                  <div class="p-3" style="background-color: #fafafa;">
+                    <p class="text-muted fw-bold">All Comments</p>
+                    {% for comment in book.bookcomment_set.all %}
+                    <div class="pt-2 pb-2" style="border-bottom: 1px solid #e2e2e2;">
+                      <div class="d-flex align-items-center">
+                        {% if comment.creator.groups.all.0.name == 'customer' %}
+                        {% for commentCus in all_customer %}
+                        {% if commentCus.username == comment.creator %}
+                        <img src='{{commentCus.customerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                        {% endif %}
+                        {% endfor %}
+                        {% elif comment.creator.groups.all.0.name == 'manager' %}
+                        {% for commentman in all_manager %}
+                        {% if commentman.username == comment.creator %}
+                        <img src='{{commentman.managerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+
+                        <div>
+                          {% if comment.creator.groups.all.0.name == 'customer' %}
+                          <h6 class="ps-2"><a class="username-text" href="{% url 'user-profile' comment.creator %}"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a></h6>
+                          {% elif comment.creator.groups.all.0.name == 'manager' %}
+                          <h6 class="ps-2"><a class="username-text" href="#"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a><span><i class="fas fa-check-circle text-primary"></i></span></h6>
+                          {% endif %}
+                          <h6 class="text-muted ps-2 font-tiny">
+                            <i class="far fa-calendar-alt mr-2"></i> {{ comment.created|date:"d N Y" }}
+                          </h6>
+                        </div>
+                      </div>
+                      <p class="margin-zero">{{comment.comment}}</p>
+                      {% if comment.image %}
+                      <br>
+                        <img src="{{comment.image.url}}" alt="">
+                      {% endif %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Book Create Comment Section -->
+                <div class="col-lg-12 col-md-12">
+                  <div class="p-3 d-flex justify-content-end" style="background-color: #fafafa; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+                    <ul class="navbar-nav" style="width: 100%;">
+                      <li class="nav-item">
+                        <div class="dropdown">
+                            <a href="/" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <strong><i class="fas fa-quote-left"></i> Write a Comment</strong>
+                            </a>
+                            <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953; width: 100%;">
+                                
+                              <div class="m-2">
+                                <form method="POST" action="" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  <div class="p-3">
+                                    {% for field in bookCommentForm %}
+                                    {% if field.label == 'Book' %}
+                                    <input type="hidden" id="bookName" name="bookName" value="{{ book }}">
+                                    <input type="hidden" id="commentFlag" name="commentFlag" value="book">
+                                    {% else %}
+                                    <div>
+                                      {{field}}
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                  <input class="btn btn--sub btn--lg  my-md btn-blue" type="submit" value="Submit" />
+                                </form>
+                              </div>
+                              
+                            </ul>
+                        </div>
+                      </li>
+                    </ul>          
+                  </div>
+                </div>
+
+              </div>
+              {% else %}
+                {% if flag == True %}
+                <div class="p-3 mb-3 bg-white border-all border-radius-10">
+                  <strong class="text-muted">Your book post <span class="text-blue">"{{book.name}}"</span> still not reviewed by Manager. We appreciate your patience. Thank you.</strong>
+                </div>
+                {% else %}
+                <div class="p-3 mb-3 bg-white border-all border-radius-10">
+                  <strong class="text-muted">{{customerInfo.first_name}} {{customerInfo.last_name}}'s book post <span class="text-blue">"{{book.name}}"</span> still not reviewed by Manager.</strong>
+                </div>
+                {% endif %}
+              {% endif %}
+              {% endfor %}
+
+              {% else %}
+              {% if flag == True %}
+              <p>You haven't post any book yet. Please post your unused books here for selling or exchanging. Thank you.</p>
+              {% else %}
+              <p>{{customerInfo.first_name}} {{customerInfo.last_name}} hasn't post any book yet.</p>
+              {% endif %}
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+  </section>
+
+    {% endblock %}
+</body>
+</html>

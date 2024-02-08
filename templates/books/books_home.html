@@ -1,0 +1,248 @@
+{% extends "users/main.html" %} 
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container">
+  <br><br>
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="row">
+        <div class="book-search-bg mb-4">
+          <div class="panel-heading book-search-heading">
+            <h2 class="font-weight-700"><i class="fas fa-search"></i> Search Your Books: {{books_count}} Books</h2>
+          </div>
+          <div class="book-search-form">
+            <form action="" method="get">
+              <!-- {{bookFilter.form.as_p }} -->
+              <div class="row form-group">
+                  <div class="col-md-9 mb-3">
+                      <h6 class="text-muted mb-3">Book Name</h6>
+                      {{ bookFilter.form.name|add_class:"form-control" }}
+                  </div>
+                  <div class="col-md-3 mb-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-blue"><i class="fas fa-search"></i> Search</button>
+                  </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- <div class="book-search-bg mb-4">
+          {% if search_books_count %}
+          <p class="text-muted mb-3">Search found {{search_books_count}} books.</p>
+          {% else %}
+          <p class="text-muted mb-3">Total Post : {{all_books_count}}</p>
+          {% endif %}
+        </div> -->
+
+        {% if books %}
+        {% for book in books %}
+        {% if book.review == 'True' %}
+        <div class="col-lg-12 col-md-12 mb-4">
+          <div class="blog-item d-flex book-post-bg border-bottom-radius-none border-bottom">
+            <div class="blog-thumb">
+              <a href="{% url 'books-details' book.slug %}">
+                <img src="{{ book.bookImageURL }}" alt="{{ book.name }}" class="img-thumbnail book-img"/>
+              </a>
+            </div>
+
+            <div class="blog-item-content mx-4">
+              <div>
+                  <div class="mb-3">
+                    <h2 class="">
+                        <a class="text-blue" href="{% url 'books-details' book.slug %}"> {{ book.name }} </a>
+                      </h2>
+                      <h6 class="text-blue"> by {{book.author}} (Author)</h6>
+                </div>
+                <div class="blog-item-meta mb-2">
+                  <span class="text-black text-capitalize me-3">
+                    <i class="fas fa-book mr-2"></i> {{ book.edition }} Edition
+                  </span>
+                  <!-- <span class="text-capitalize me-3">
+                    <i class="fas fa-bookmark mr-2"></i> {{ book.category.category }} Category
+                  </span> -->
+                  {% for cat in book.category.all %}
+                      <span class="text-capitalize me-3">
+                        &bull; {{ cat.name }}
+                      </span>
+                  {%endfor%}
+                </div>
+                <div class="mb-3">
+                  <span class="text-black text-capitalize me-3">
+                    <i class="far fa-calendar-alt mr-2"></i> {{ book.created|date:"d N Y" }}
+                  </span>
+                  <a href="{% url 'user-profile' book.creator.username %}" class="text-blue text-capitalize mr-3">
+                    <i class="fa fa-user mr-2"></i> {{ book.creator.first_name }}
+                  </a>
+                </div>
+  
+                <p class="mb-3">{{ book.description|truncatechars:250 }}</p>
+
+                <div class="d-flex align-items-end">
+                  {% if book.exchange == 'Yes' %}
+                  <p class="font-weight-700">Exchange: <span style="font-size: 1.5em;" class="font-weight-900 text-blue">{{book.exchange}}</span></p>
+                  {% else %}
+                  <!-- <p class="font-weight-700">Exchange: <span style="font-size: 1.5em;">{{book.exchange}}</span></p> -->
+                  {% endif%}
+                  {% if book.price != None %}
+                  <p class="font-weight-700 ms-3">Price: <span class="font-weight-900 text-blue" style="font-size: 2em;">&#2547;</span><span style="font-size: 1.5em;" class="font-weight-900 text-blue">{{book.price}}</span></p>
+                  {% else %}
+                  <!-- <p class="font-weight-700 ms-3">Price: <span style="font-size: 1.5em;">{{book.price}}</span></p> -->
+                  {% endif%}
+                </div>
+
+                <p class="card-text"><small class="text-muted">Last Updated: {{ book.updated }}</small></p>
+              </div>
+
+              <div class="mt-3">
+                <a href="{% url 'books-details' book.slug %}" class="btn btn-blue btn-icon">
+                  See Details <i class="fas fa-angle-double-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Book Old Comment Section -->
+          {% if book.bookcomment_set.all %}
+          <div class="col-lg-12 col-md-12">
+            <div class="p-3" style="background-color: #fafafa;">
+              <p class="text-muted fw-bold">All Comments</p>
+              {% for comment in book.bookcomment_set.all %}
+              <div class="pt-2 pb-2" style="border-bottom: 1px solid #e2e2e2;">
+                <div class="d-flex align-items-center">
+                  {% if comment.creator.groups.all.0.name == 'customer' %}
+                  {% for commentCus in all_customer %}
+                  {% if commentCus.username == comment.creator %}
+                  <img src='{{commentCus.customerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                  {% endif %}
+                  {% endfor %}
+                  {% elif comment.creator.groups.all.0.name == 'manager' %}
+                  {% for commentman in all_manager %}
+                  {% if commentman.username == comment.creator %}
+                  <img src='{{commentman.managerImageURL}}' alt="" width="34" height="34" class="rounded-circle me-2">
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+
+                  <div>
+                    {% if comment.creator.groups.all.0.name == 'customer' %}
+                    <h6 class="ps-2"><a class="username-text" href="{% url 'user-profile' comment.creator %}"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a></h6>
+                    {% elif comment.creator.groups.all.0.name == 'manager' %}
+                    <h6 class="ps-2"><a class="username-text" href="#"> {{comment.creator.first_name}} {{comment.creator.last_name}} </a><span><i class="fas fa-check-circle text-primary"></i></span></h6>
+                    {% endif %}
+                    <h6 class="text-muted ps-2 font-tiny">
+                      <i class="far fa-calendar-alt mr-2"></i> {{ comment.created|date:"d N Y" }}
+                    </h6>
+                  </div>
+                </div>
+                <p class="margin-zero">{{comment.comment}}</p>
+                {% if comment.image %}
+                <br>
+                  <img src="{{comment.image.url}}" alt="">
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Book Create Comment Section -->
+          <div class="col-lg-12 col-md-12 mb-4">
+            <div class="p-3 d-flex justify-content-end" style="background-color: #fafafa; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+              <ul class="navbar-nav" style="width: 100%;">
+                <li class="nav-item">
+                  <div class="dropdown">
+                      <a href="/" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <strong><i class="fas fa-quote-left"></i> Create Comment</strong>
+                      </a>
+                      <ul class="bg-navbar dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="background-color: #0b3953; width: 100%;">
+                          
+                        <div class="m-2">
+                          <form method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="p-3">
+                              {% for field in commentForm %}
+                              {% if field.label == 'Book' %}
+                              <input type="hidden" id="bookName" name="bookName" id="replyingto_id" value="{{ book }}">
+                              {% else %}
+                              <div>
+                                {{field}}
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                            </div>
+                            <input class="btn btn--sub btn--lg  my-md btn-blue" type="submit" value="Submit" />
+                          </form>
+                        </div>
+                        
+                      </ul>
+                  </div>
+                </li>
+              </ul>          
+            </div>
+          </div>
+
+        </div>
+        {% else %}
+        <div class="p-3 mb-3 bg-white border-all border-radius-10">
+          <strong class="text-muted"><span class="text-blue">"{{book.name}}"</span> book posts still not reviewed by Manager. We appreciate your patience. Thank you.</strong>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <strong>There is no Book Post from Customer yet.</strong>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="book-side-bg ms-3 mb-4">
+        <!-- <div class="d-flex justify-content-center">
+          <a href="{% url 'create-post' %}" class="btn btn-blue my-4"
+            ><i class="fa fa-plus"></i>
+            <span> Post a New Book</span>
+          </a>
+        </div> -->
+
+        <div class="sidebar-wrap pl-lg-4 mt-5 mt-lg-0 my-5">
+          <div class="panel-heading book-search-heading">
+            <h3 class="text-center text-muted font-weight-700"><i class="fas fa-bookmark"></i> Latest Books</h3>
+          </div>
+          <div class="sidebar-widget latest-post mb-3 px-4 py-2">
+            {% for book in latest_books %}
+            {% if book.review == 'True' %}
+            <div class="py-2">
+              <h6 class="my-2">
+                <a class="text-blue font-weight-700" href="{% url 'books-details' book.slug %}">
+                  {{ book.name }}
+                </a>
+              </h6>
+              <span class="text-sm text-muted" >
+                {{ book.created|date:"d N Y" }}
+            </span>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
+      <div class="book-search-bg mb-4 ms-3">
+        <div class="panel-heading book-search-heading">
+          <h2 class="text-center font-weight-700">All Category({{category_count}})</h2>
+        </div>
+        <ul class="list-unstyled mb-3 px-4 py-2 my-2">
+          {% for cat,count in category_dict %}
+          <li class="align-items-center mt-3">
+            <a class="text-blue font-weight-700" href="{% url 'books-category' cat.slug %}">{{ cat.name }}({{count}})</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
